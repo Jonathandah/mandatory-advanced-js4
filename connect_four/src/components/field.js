@@ -17,7 +17,7 @@ let Grid = (props) => {
                             let id = '_' + Math.random().toString(36).substr(2, 9);
                             
                             return(
-                                <div className="Grid__row__cell" key={id} style={{ background: cell }} onClick={(()=>props.onClickCell(i, j))}></div>
+                                <div className="Grid__row__cell emptyCell" key={id} style={{ background: cell }} onClick={(()=>props.onClickCell(j, i, row))}></div>
                             )
                         })}
                     </div>

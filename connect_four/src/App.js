@@ -2,11 +2,12 @@ import React, { useReducer } from 'react';
 import './App.css';
 import Grid from "./components/field";
 
-const grid = Array(6)
+const grid = Array(7)
     .fill(null)
-    .map(_ => Array(7).fill("white"));
+    .map(_ => Array(6).fill("white"));
 
 console.log(grid);
+
 
 
 function reducer(state, action){
@@ -15,11 +16,25 @@ function reducer(state, action){
     case "fill_cell":
     let grid =[...state.grid];
 
-    console.log(action.row);
-    console.log(action.column);
-    console.log( grid[action.row][action.column]);
-    if(grid[action.row][action.column]==="white"){
-      grid[action.row][action.column] = state.selectedColor;
+    console.log(action.rowArray);
+    for(let i = action.rowArray.length-1; i>=0; i--){
+
+      if(action.rowArray[i] === "white"){
+        console.log(action.rowArray[i] )
+        action.rowArray[i] = state.selectedColor;
+        return{
+          ...state,
+          grid,
+          selectedColor: state.selectedColor === "red" ? state.selectedColor = "yellow"  : state.selectedColor = "red"
+        }
+      }
+    }
+
+
+    //gamla men kunde inte få färgen att landa längst ner
+    /*
+    if(grid[action.column][action.row]==="white"){
+      grid[action.column][action.row] = state.selectedColor;
       return{
         ...state,
         grid,
@@ -31,8 +46,18 @@ function reducer(state, action){
         grid,
       }
     }
+    */
   }
 }
+  function checkColumn(){
+    for(let column of grid){
+      for(let i = column.length-1; i>=0; i--){
+        if(column[i]){
+
+        }
+      }
+    }
+  }
 
 const App = ()=>{
 const [state, dispatch] = useReducer(reducer, { selectedColor: "red", grid });
@@ -43,9 +68,9 @@ const [state, dispatch] = useReducer(reducer, { selectedColor: "red", grid });
     <div className="App">
       <main className="App__main">
         <div className="App__main__field">
-          <Grid grid={grid} onClickCell={(row, column) => {
-            dispatch({ type: "fill_cell", row, column })
-          
+          <Grid grid={grid}  onClickCell={(row, column, rowArray) => {
+            dispatch({ type: "fill_cell", row, column, rowArray })
+
             }
             
           }></Grid>

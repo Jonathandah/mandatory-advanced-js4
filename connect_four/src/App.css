@@ -13,11 +13,11 @@
   justify-content: center;
   margin: 100px;
   border-collapse: collapse;
-  flex-direction: column;
+  flex-direction: row;
 }
 .Grid__row{
-  display: table-row;
- 
+  display: flex;
+  flex-direction: column;
 }
 
 .Grid__row__cell{
