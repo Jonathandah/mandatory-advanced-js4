@@ -7,7 +7,7 @@ const grid = Array(7)
     .map(_ => Array(6).fill("white"));
 
 console.log(grid);
-
+//grid[0][5] = "black";
 
 
 function reducer(state, action){
@@ -16,7 +16,6 @@ function reducer(state, action){
     case "fill_cell":
     let grid =[...state.grid];
 
-    console.log(action.rowArray);
     for(let i = action.rowArray.length-1; i>=0; i--){
 
       if(action.rowArray[i] === "white"){
@@ -29,6 +28,7 @@ function reducer(state, action){
         }
       }
     }
+    //får fel för att jag inte returnerar något när en cell inte är vit. Vad ska jag returnera?
 
 
     //gamla men kunde inte få färgen att landa längst ner
@@ -49,28 +49,39 @@ function reducer(state, action){
     */
   }
 }
-  function checkColumn(){
-    for(let column of grid){
-      for(let i = column.length-1; i>=0; i--){
-        if(column[i]){
 
-        }
-      }
-    }
-  }
 
 const App = ()=>{
 const [state, dispatch] = useReducer(reducer, { selectedColor: "red", grid });
 
-//går inte att köra state.grid?
+
+function checkLine(a,b,c,d){
+  return((a !== "white") && (a ===b) && (a === c) && (a === d))
+}
+
+
+function checkColumn(){
+  console.log(state.grid);
+  let grid = [...state.grid];
+  for(let c = 0; c<7; c++){
+    for(let r = 0; r<3; r++){
+      console.log("column", grid[c], grid[c][r]);
+      if(checkLine(grid[c][r], grid[c][r+1], grid[c][r+2], grid[c][r+3])){
+        console.log(grid[c][r], "won");
+      }
+    }
+  }
+}
+//vinnaren ges ut en runda för sent, varflör?
+
 
   return (
     <div className="App">
       <main className="App__main">
         <div className="App__main__field">
-          <Grid grid={grid}  onClickCell={(row, column, rowArray) => {
+          <Grid grid={state.grid}  onClickCell={(row, column, rowArray) => {
             dispatch({ type: "fill_cell", row, column, rowArray })
-
+            checkColumn();
             }
             
           }></Grid>

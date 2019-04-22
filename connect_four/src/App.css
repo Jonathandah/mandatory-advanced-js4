@@ -13,16 +13,21 @@
   justify-content: center;
   margin: 100px;
   border-collapse: collapse;
+  
   flex-direction: row;
 }
 .Grid__row{
+  border: 1px solid black;
+  border-collapse: collapse;
   display: flex;
   flex-direction: column;
 }
 
 .Grid__row__cell{
+  border-radius: 50%;
   display: table-cell;
   border: 1px solid black;
   width: 80px;
   height: 80px;
+  margin: 2px;
 }
