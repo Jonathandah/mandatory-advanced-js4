@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useState, useEffect } from 'react';
 import './App.css';
 import Grid from "./components/field";
 
@@ -28,6 +28,16 @@ function reducer(state, action){
         }
       }
     }
+
+    case "reset_grid":
+      let newGrid =  Array(7)
+      .fill(null)
+      .map(_ => Array(6).fill("white"));
+
+      return {
+        ...state,
+        grid: newGrid,
+      }
     //får fel för att jag inte returnerar något när en cell inte är vit. Vad ska jag returnera?
 
 
@@ -53,7 +63,14 @@ function reducer(state, action){
 
 const App = ()=>{
 const [state, dispatch] = useReducer(reducer, { selectedColor: "red", grid});
-const [winner, updateWinner] = useState("");
+const [winner, updateWinner] = useState(""); //kan ha winner i reducer
+
+useEffect(() => {
+  checkColumn();
+  checkRow();
+  checkDownRight();
+  checkDownLeft();
+}, [state]);
 
 
 function checkLine(a,b,c,d){
@@ -106,6 +123,9 @@ function checkDownLeft(){
   }
 //vinnaren ges ut en runda för sent, varflör?
 
+
+
+//använd dispatch för att tömma gridden.
 function restart(){
   const grid = Array(7)
     .fill(null)
@@ -119,14 +139,11 @@ function restart(){
     <div className="App">
       <main className="App__main">
         <p>{winner}</p>
-        <button onClick={()=> restart()}>Restart</button>
+        <button onClick={()=> dispatch({type: "reset_grid"})}>Restart</button>
         <div className="App__main__field">
           <Grid grid={state.grid}  onClickCell={(row, column, rowArray) => {
-            dispatch({ type: "fill_cell", row, column, rowArray })
-            checkColumn();
-            checkRow();
-            checkDownRight();
-            checkDownLeft();
+            dispatch({ type: "fill_cell", row, column, rowArray });
+
             }
             
           }></Grid>
