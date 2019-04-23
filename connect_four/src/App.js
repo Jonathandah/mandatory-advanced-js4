@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 import './App.css';
 import Grid from "./components/field";
 
@@ -52,7 +52,8 @@ function reducer(state, action){
 
 
 const App = ()=>{
-const [state, dispatch] = useReducer(reducer, { selectedColor: "red", grid });
+const [state, dispatch] = useReducer(reducer, { selectedColor: "red", grid});
+const [winner, updateWinner] = useState("");
 
 
 function checkLine(a,b,c,d){
@@ -61,13 +62,12 @@ function checkLine(a,b,c,d){
 
 
 function checkColumn(){
-  console.log(state.grid);
   let grid = [...state.grid];
   for(let c = 0; c<7; c++){
     for(let r = 0; r<3; r++){
-      console.log("column", grid[c], grid[c][r]);
       if(checkLine(grid[c][r], grid[c][r+1], grid[c][r+2], grid[c][r+3])){
         console.log(grid[c][r], "won");
+        updateWinner(grid[c][r]);
       }
     }
   }
@@ -97,8 +97,8 @@ let grid = [...state.grid];
 function checkDownLeft(){
   let grid = [...state.grid];
     for(let c=0; c<4; c++){
-      for(let r=0; r<6; r++){
-        if(checkLine(grid[c][r], grid[c-1][r-1], grid[c-2][r-2], grid[c-3][r-3])){
+      for(let r=3; r<6; r++){
+        if(checkLine(grid[c][r], grid[c+1][r-1], grid[c+2][r-2], grid[c+3][r-3])){
           console.log(grid[c][r], "won");
         }
       }
@@ -106,10 +106,20 @@ function checkDownLeft(){
   }
 //vinnaren ges ut en runda för sent, varflör?
 
+function restart(){
+  const grid = Array(7)
+    .fill(null)
+    .map(_ => Array(6).fill("white"));
+
+    state.grid = grid;
+    console.log(state.grid);
+}
 
   return (
     <div className="App">
       <main className="App__main">
+        <p>{winner}</p>
+        <button onClick={()=> restart()}>Restart</button>
         <div className="App__main__field">
           <Grid grid={state.grid}  onClickCell={(row, column, rowArray) => {
             dispatch({ type: "fill_cell", row, column, rowArray })
