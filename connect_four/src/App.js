@@ -72,6 +72,38 @@ function checkColumn(){
     }
   }
 }
+function checkRow(){
+  let grid = [...state.grid];
+  for(let c = 0; c<4; c++){
+    for(let r = 0; r<6; r++){
+      if(checkLine(grid[c][r], grid[c+1][r], grid[c+2][r], grid[c+3][r])){
+        console.log(grid[c][r], "won");
+      }
+    }
+  }
+}
+
+function checkDownRight(){
+let grid = [...state.grid];
+  for(let c=0; c<4; c++){
+    for(let r=0; r<3; r++){
+      if(checkLine(grid[c][r], grid[c+1][r+1], grid[c+2][r+2], grid[c+3][r+3])){
+        console.log(grid[c][r], "won");
+      }
+    }
+  }
+}
+
+function checkDownLeft(){
+  let grid = [...state.grid];
+    for(let c=0; c<4; c++){
+      for(let r=0; r<6; r++){
+        if(checkLine(grid[c][r], grid[c-1][r-1], grid[c-2][r-2], grid[c-3][r-3])){
+          console.log(grid[c][r], "won");
+        }
+      }
+    }
+  }
 //vinnaren ges ut en runda för sent, varflör?
 
 
@@ -82,6 +114,9 @@ function checkColumn(){
           <Grid grid={state.grid}  onClickCell={(row, column, rowArray) => {
             dispatch({ type: "fill_cell", row, column, rowArray })
             checkColumn();
+            checkRow();
+            checkDownRight();
+            checkDownLeft();
             }
             
           }></Grid>
